@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Call break calculator</title>
+  <meta name="description" content="Call break points calculator">
+  <meta name="author" content="Anup Kattel">
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <script src="angular.min.js"></script>
+  <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+  <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
+  <style>
+	.totalLine {
+		border-top: double #bbb;
+	}
+	.noBorder input {
+		border: none;
+	}
+	.selected {
+		border: 1px solid green;
+	}
+	.footerButton {
+		bottom: 0;
+		position: absolute;
+		width: 100%;
+	}
+	.bottomRow {
+		margin-top: .5em;
+		margin-bottom: .5em;
+	}
+	.bottomRow button {
+	}
+  </style>
+  <script>
+	var app = angular.module('callBreakCalc', []);
+	app.controller('callBreakCtrl', function($scope) {
+		$scope.games = [
+				[{call:0, score:0},{call:0, score:0},{call:0, score:0},{call:0, score:0}],
+				//[{call:'-', score:0},{call:'-', score:0},{call:'-', score:0},{call:'-', score:0}],
+			];
+		
+		$scope.gameMode = false;
+		$scope.gameIndex = 0;
+		$scope.playerIndex = 0;
+		
+    $scope.playerPointsClicked = function(gameIndex, playerIndex) {
+			$scope.gameIndex = gameIndex;
+			$scope.playerIndex = playerIndex;
+    };
+		
+    $scope.increasePoints = function() {
+			var playerPoints = $scope.games[$scope.gameIndex][$scope.playerIndex];
+			if (!$scope.gameMode){
+				playerPoints.call++;
+			} else {
+				playerPoints.score++;
+			}
+    };
+		
+    $scope.decreasePoints = function() {
+			var playerPoints = $scope.games[$scope.gameIndex][$scope.playerIndex];
+			if (!$scope.gameMode){
+				if (playerPoints.call > 1){
+					playerPoints.call--;
+				}
+			} else {
+				if (playerPoints.score > 0)
+					playerPoints.score--;
+			}
+    };
+		
+	});
+  </script>
+</head>
+<body data-ng-app="callBreakCalc" data-ng-controller="callBreakCtrl">
+	<div class="col-md-12 text-center">
+		<h2>Call Break</h2>
+		<br />
+	</div>
+	<table class="table text-center">
+		<thead>
+			<tr class="noBorder form-group">
+				<th><input class="form-control" type="text" placeholder="Player 1"/></th>
+				<th><input class="form-control" type="text" placeholder="Player 2"/></th>
+				<th><input class="form-control" type="text" placeholder="Player 3"/></th>
+				<th><input class="form-control" type="text" placeholder="Player 4"/></th>
+			</tr> 
+		</thead> 
+		<tbody>
+			<tr ng-repeat="game in games">
+				<td ng-repeat="player in game" ng-click="playerPointsClicked($parent.$index, $index)" ng-class="{'selected': games[gameIndex][playerIndex]==player}">
+					<span ng-show="player.call>0">{{player.call}}</span>
+					<span ng-hide="player.call>0">-</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<div class="footerButton container">
+		<div class="row bottomRow">
+			<button type="button" class="col-xs-4 btn btn-primary" ng-click="decreasePoints()">-</button>
+			<button type="button" class="col-xs-4 btn btn-success" ng-show="gameMode">next</button>
+			<button type="button" class="col-xs-4 btn btn-success" ng-hide="gameMode">start</button>
+			<button type="button" class="col-xs-4 btn btn-primary" ng-click="increasePoints()">+</button>
+		</div>
+	</div>
+</body>
+</html>

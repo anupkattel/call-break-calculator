@@ -86,6 +86,55 @@
 			}
     };
 		
+		$scope.canStartHand = function(){
+			if ($scope.hands[$scope.handIndex].started){
+				return false;
+			}
+			for (var i=0; i < $scope.hands[$scope.handIndex].playerPoints.length; i++){
+				if ($scope.hands[$scope.handIndex].playerPoints[i].call < 1){
+					return false;
+				}
+			}
+			return true;
+		};
+		
+		$scope.resetHand = function(){
+			$scope.hands[$scope.handIndex].started = false;			
+			for (var i=0; i < $scope.hands[$scope.handIndex].playerPoints.length; i++){
+				var playerPoint = $scope.hands[$scope.handIndex].playerPoints[i];
+				playerPoint.call = 0;
+				playerPoint.extra = 0;
+			}
+		};
+		
+		$scope.startHand = function(){
+			$scope.hands[$scope.handIndex].started = true;
+			// add a new hand if we haven't added 5 hands already and this is the last hand
+			if ($scope.hands.length > 4){
+				return;
+			}
+			if ($scope.hands.length-1 === $scope.handIndex){
+				$scope.hands.push(getNewHand());
+			}
+		};
+		
+		$scope.getPlayersTotal = function(playerIndex){
+			var totalCall = 0;
+			var totalExtra = 0;
+			for (var i=0; i < $scope.hands.length; i++){
+				var hand = $scope.hands[i];
+				if (hand.started){
+					var playerPoint = hand.playerPoints[playerIndex];
+					if (playerPoint.extra < 0){
+						totalCall -= playerPoint.call;
+					} else {
+						totalCall += playerPoint.call;
+						totalExtra += playerPoint.extra;
+					}
+				}
+			}
+			return totalCall + (totalExtra/10);
+		};
 	});
   </script>
 </head>
@@ -110,13 +159,19 @@
 					<span ng-show="playerPoint.call>0">{{playerPoint.call}}</span><span ng-show="hand.started && playerPoint.extra > -1">.{{playerPoint.extra}}</span>
 				</td>
 			</tr>
+			<tr class="totalLine" ng-show="hands.length > 1">
+				<td>{{getPlayersTotal(0)}}</td>
+				<td>{{getPlayersTotal(1)}}</td>
+				<td>{{getPlayersTotal(2)}}</td>
+				<td>{{getPlayersTotal(3)}}</td>
+			</tr>
 		</tbody>
 	</table>
 	
 	<div class="footerButton">
 		<div class="bottomRow text-center">
-			<button type="button" class="btn btn-success btnStartReset" ng-click="hands[handIndex].started = true">start</button>
-			<button type="button" class="btn btn-danger btnStartReset" ng-show="false">reset hand</button>
+			<button type="button" class="btn btn-success btnStartReset" ng-show="canStartHand()" ng-click="startHand()">start</button>
+			<button type="button" class="btn btn-danger btnStartReset" ng-show="hands[handIndex].started == true" ng-click="resetHand()">reset hand</button>
 		</div>
 		<div class="bottomRow">
 			<button type="button" class="btn btn-info btnDecrease" ng-click="decreasePoints()">-</button>

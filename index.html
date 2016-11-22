@@ -5,10 +5,10 @@
   <title>Call break calculator</title>
   <meta name="description" content="Call break points calculator">
   <meta name="author" content="Anup Kattel">
-  <link rel="stylesheet" href="bootstrap.min.css"><!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-  <link rel="stylesheet" href="style.css?v=1.0">
-  <script src="angular.min.js"></script><!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
-  <script src="app.js"></script>
+  <link rel="stylesheet" href="css/bootstrap.min.css"><!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+  <link rel="stylesheet" href="css/style.css?v=1.0">
+  <script src="js/angular.min.js"></script><!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
+  <script src="js/app.js"></script>
 </head>
 <body data-ng-app="callBreakCalc" data-ng-controller="callBreakCtrl">
 	<div class="col-md-12 text-center">
@@ -25,9 +25,11 @@
 		</thead> 
 		<tbody>
 			<tr ng-repeat="hand in hands" ng-class="{'lastHand' : $index === 4}">
-				<td ng-repeat="playerPoint in hand.playerPoints" ng-click="playerPointClicked($parent.$index, $index)" ng-class="{'selected': hands[handIndex].playerPoints[playerIndex]==playerPoint}">
+				<td ng-repeat="playerPoint in hand.playerPoints" ng-click="playerPointClicked($parent.$index, $index)">
+					<span class="glyphicon glyphicon-minus btnDecrease" ng-show="hands[handIndex].playerPoints[playerIndex]==playerPoint" role="button" ng-click="decreasePoints()"></span>
 					<span ng-hide="playerPoint.call>0">-</span>
 					<span ng-show="playerPoint.call>0" ng-class="{'lostCall': (playerPoint.extra < 0)}">{{playerPoint.call}}</span><span ng-show="hand.started && playerPoint.extra > -1">.{{playerPoint.extra}}</span>
+					<span class="glyphicon glyphicon-plus btnIncrease" ng-show="hands[handIndex].playerPoints[playerIndex]==playerPoint" role="button" ng-click="increasePoints()"></span>
 				</td>
 			</tr>
 			<tr class="totalLine" ng-show="hands.length > 1">
@@ -37,10 +39,6 @@
 	</table>
 	
 	<div class="buttonHolder">
-		<div class="bottomRow">
-			<button type="button" class="btn btn-info btnDecrease" ng-click="decreasePoints()">-</button>
-			<button type="button" class="btn btn-info btnIncrease" ng-click="increasePoints()">+</button>
-		</div>
 		<div class="bottomRow text-center">
 			<button type="button" class="btn btn-success btnStartReset" ng-show="canStartHand()" ng-click="startHand()">start</button>
 			<button type="button" class="btn btn-danger btnStartReset" ng-show="hands[handIndex].started == true" ng-click="resetHand()">reset hand</button>

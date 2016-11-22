@@ -38,11 +38,9 @@
 		</tbody>
 	</table>
 	
-	<div class="buttonHolder">
-		<div class="bottomRow text-center">
-			<button type="button" class="btn btn-success btnStartReset" ng-show="canStartHand()" ng-click="startHand()">start</button>
-			<button type="button" class="btn btn-danger btnStartReset" ng-show="hands[handIndex].started == true" ng-click="resetHand()">reset hand</button>
-		</div>
+	<div class="btnStartResetContainer text-center">
+		<button type="button" class="btn btn-success btnStartReset" ng-show="canStartHand()" ng-click="startHand()">start</button>
+		<button type="button" class="btn btn-danger btnStartReset" ng-show="hands[handIndex].started == true" ng-click="resetHand()">reset hand</button>
 	</div>
 </body>
 </html>

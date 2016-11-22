@@ -53,6 +53,9 @@ $scope.decreasePoints = function() {
     };
     
     $scope.resetHand = function(){
+        if (!window.confirm('Clear the score in selected hand?')){
+            return;
+        }
         $scope.hands[$scope.handIndex].started = false;			
         for (var i=0; i < $scope.hands[$scope.handIndex].playerPoints.length; i++){
             var playerPoint = $scope.hands[$scope.handIndex].playerPoints[i];

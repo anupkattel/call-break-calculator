@@ -13,6 +13,7 @@
 <body data-ng-app="callBreakCalc" data-ng-controller="callBreakCtrl">
 	<div class="col-md-12 text-center">
 		<h2>Call Break</h2>
+		<button type="button" class="close" aria-label="Close" ng-click="resetGame()"><span aria-hidden="true">&times;</span></button>
 		<br />
 	</div>
 	<table class="table text-center">
@@ -40,7 +41,7 @@
 	
 	<div class="btnStartResetContainer text-center">
 		<button type="button" class="btn btn-success btnStartReset" ng-show="canStartHand()" ng-click="startHand()">start</button>
-		<button type="button" class="btn btn-danger btnStartReset" ng-show="hands[handIndex].started == true" ng-click="resetHand()">reset hand</button>
+		<button type="button" class="btn btn-danger btnStartReset" ng-show="canResetHand()" ng-click="resetHand()">reset hand</button>
 	</div>
 </body>
 </html>

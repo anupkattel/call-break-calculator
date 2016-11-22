@@ -5,138 +5,10 @@
   <title>Call break calculator</title>
   <meta name="description" content="Call break points calculator">
   <meta name="author" content="Anup Kattel">
-  <link rel="stylesheet" href="bootstrap.min.css">
-  <script src="angular.min.js"></script>
-  <!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
-  <!--<link rel="stylesheet" href="css/styles.css?v=1.0">-->
-  <style>
-	.totalLine {
-		border-top: double #bbb;
-	}
-	.noBorder input {
-		border: none;
-	}
-	.selected {
-		border: 1px solid green;
-	}
-	.buttonHolder {
-		margin-top: 3em;
-	}
-	.bottomRow {
-		margin: .5em;
-	}
-	
-	.btnDecrease, .btnIncrease{
-		width: 33%;
-	}
-	
-	.btnStartReset{
-		width: 28%;
-		margin-top: -4em;
-	}
-	
-	.btnIncrease{
-		float: right;
-	}
-	
-	.lastHand{
-	}
-  </style>
-	
-  <script>
-	var app = angular.module('callBreakCalc', []);
-	app.controller('callBreakCtrl', function($scope) {
-		var getNewHand = function(){
-			return {playerPoints:[{call:0, extra:0},{call:0, extra:0},{call:0, extra:0},{call:0, extra:0}], started: false};
-		};
-		
-		$scope.hands = [];
-		$scope.hands.push(getNewHand());
-		
-		$scope.handIndex = 0;
-		$scope.playerIndex = 0;
-		
-    $scope.playerPointClicked = function(handIndex, playerIndex) {
-			$scope.handIndex = handIndex;
-			$scope.playerIndex = playerIndex;
-    };
-		
-    $scope.increasePoints = function() {
-			var hand = $scope.hands[$scope.handIndex];
-			var playerPoint = hand.playerPoints[$scope.playerIndex];
-			if (!hand.started){
-				playerPoint.call++;
-			} else {
-				playerPoint.extra++;
-			}
-    };
-		
-    $scope.decreasePoints = function() {
-			var hand = $scope.hands[$scope.handIndex];
-			var playerPoint = hand.playerPoints[$scope.playerIndex];
-			if (!hand.started){
-				if (playerPoint.call >1){
-					playerPoint.call--;
-				}
-			} else {
-				if (playerPoint.extra > -1){
-					playerPoint.extra--;
-				}
-			}
-    };
-		
-		$scope.canStartHand = function(){
-			if ($scope.hands[$scope.handIndex].started){
-				return false;
-			}
-			for (var i=0; i < $scope.hands[$scope.handIndex].playerPoints.length; i++){
-				if ($scope.hands[$scope.handIndex].playerPoints[i].call < 1){
-					return false;
-				}
-			}
-			return true;
-		};
-		
-		$scope.resetHand = function(){
-			$scope.hands[$scope.handIndex].started = false;			
-			for (var i=0; i < $scope.hands[$scope.handIndex].playerPoints.length; i++){
-				var playerPoint = $scope.hands[$scope.handIndex].playerPoints[i];
-				playerPoint.call = 0;
-				playerPoint.extra = 0;
-			}
-		};
-		
-		$scope.startHand = function(){
-			$scope.hands[$scope.handIndex].started = true;
-			// add a new hand if we haven't added 5 hands already and this is the last hand
-			if ($scope.hands.length > 4){
-				return;
-			}
-			if ($scope.hands.length-1 === $scope.handIndex){
-				$scope.hands.push(getNewHand());
-			}
-		};
-		
-		$scope.getPlayersTotal = function(playerIndex){
-			var totalCall = 0;
-			var totalExtra = 0;
-			for (var i=0; i < $scope.hands.length; i++){
-				var hand = $scope.hands[i];
-				if (hand.started){
-					var playerPoint = hand.playerPoints[playerIndex];
-					if (playerPoint.extra < 0){
-						totalCall -= playerPoint.call;
-					} else {
-						totalCall += playerPoint.call;
-						totalExtra += playerPoint.extra;
-					}
-				}
-			}
-			return totalCall + (totalExtra/10);
-		};
-	});
-  </script>
+  <link rel="stylesheet" href="bootstrap.min.css"><!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
+  <link rel="stylesheet" href="style.css?v=1.0">
+  <script src="angular.min.js"></script><!--<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>-->
+  <script src="app.js"></script>
 </head>
 <body data-ng-app="callBreakCalc" data-ng-controller="callBreakCtrl">
 	<div class="col-md-12 text-center">
@@ -146,17 +18,16 @@
 	<table class="table text-center">
 		<thead>
 			<tr class="noBorder form-group">
-				<th><input class="form-control text-center" type="text" placeholder="Player 1"/></th>
-				<th><input class="form-control text-center" type="text" placeholder="Player 2"/></th>
-				<th><input class="form-control text-center" type="text" placeholder="Player 3"/></th>
-				<th><input class="form-control text-center" type="text" placeholder="Player 4"/></th>
+				<th ng-repeat="players in hands[0].playerPoints">
+					<input class="form-control text-center" type="text" placeholder="Player {{$index+1}}"/>
+				</th>
 			</tr> 
 		</thead> 
 		<tbody>
 			<tr ng-repeat="hand in hands" ng-class="{'lastHand' : $index === 4}">
 				<td ng-repeat="playerPoint in hand.playerPoints" ng-click="playerPointClicked($parent.$index, $index)" ng-class="{'selected': hands[handIndex].playerPoints[playerIndex]==playerPoint}">
 					<span ng-hide="playerPoint.call>0">-</span>
-					<span ng-show="playerPoint.call>0">{{playerPoint.call}}</span><span ng-show="hand.started && playerPoint.extra > -1">.{{playerPoint.extra}}</span>
+					<span ng-show="playerPoint.call>0" ng-class="{'lostCall': (playerPoint.extra < 0)}">{{playerPoint.call}}</span><span ng-show="hand.started && playerPoint.extra > -1">.{{playerPoint.extra}}</span>
 				</td>
 			</tr>
 			<tr class="totalLine" ng-show="hands.length > 1">

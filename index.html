@@ -34,7 +34,9 @@
 				</td>
 			</tr>
 			<tr class="totalLine" ng-show="hands.length > 1">
-				<td ng-repeat="players in hands[0].playerPoints">{{getPlayersTotal($index)}}</td>
+				<td ng-repeat="total in playerTotals">
+					{{total.score}}
+				</td>
 			</tr>
 		</tbody>
 	</table>

@@ -35,13 +35,8 @@
 			</tr>
 			<tr class="totalLine" ng-show="hands.length > 1">
 				<td ng-repeat="total in playerTotals">
-					<!-- add a class to the winner but not when the score is 0, which happens when you reset the first hand,
-						and not when fifth hand has been started: in such case we show position badges instead-->
-					<span ng-class="{'winning':total.position == 1 && total.score > 0 && !(hands.length ===5 && hands[4].started)}">{{total.score}}</span>
-					<br>
-					<br>
-					<!-- show position badges when 5th hand has been started, but show only 1st, 2nd and 3rd-->
-					<span ng-show="hands.length === 5 && hands[4].started && total.position < 4" class="badge">{{total.position}}<sup>{{getPositionSuperscript(total.position)}}</sup></span>
+					<!-- add a class to the winner but not when the score is 0, which happens when you reset the first hand -->
+					<span ng-class="{'winning':total.position == 1 && total.score > 0}">{{total.score}}</span>
 				</td>
 			</tr>
 		</tbody>

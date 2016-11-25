@@ -181,23 +181,4 @@ app.controller('callBreakCtrl', function($scope) {
         fillPlayersPosition();
     }, true);
     
-    $scope.getPositionSuperscript = function(position){
-        if (position > 20){
-            // we don't expect to get position above 4, but the same method will work for positions upto 20
-            // could divide by 10 and use the remainder to find the position for those numbers, but it's unnecessary
-            return "";
-        }
-        
-        switch (position){
-            case 1:
-                return "st";
-            case 2:
-                return "nd";
-            case 3:
-                return "rd";
-            default:
-                return "th";
-        }
-        
-    };
 });

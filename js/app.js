@@ -147,7 +147,7 @@ app.controller('callBreakCtrl', function($scope) {
         for (var i=1; i < numberOfPlayers; i++){
             var temp = playerTotalsCopy[i];
             var j = i;
-            while (j > 0 && temp.score < playerTotalsCopy[j-1].score){
+            while (j > 0 && temp.score > playerTotalsCopy[j-1].score){
                 playerTotalsCopy[j] = playerTotalsCopy[j-1];
                 j--;
             }

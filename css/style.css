@@ -1,5 +1,5 @@
 body {
- max-width: 400px;
+ max-width: 800px;
 }
 
 .totalLine {
@@ -40,4 +40,8 @@ body {
 
 .btnIncrease{
  float: right;
+}
+
+.winning{
+    border-bottom: 1px solid #bbb;
 }
